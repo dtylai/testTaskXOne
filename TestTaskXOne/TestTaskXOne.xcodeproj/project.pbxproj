@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05D8019D292AEA0100942716 /* HoursWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D8019C292AEA0100942716 /* HoursWeatherView.swift */; };
+		05D8019F292AEA2100942716 /* HoursWeatherCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D8019E292AEA2100942716 /* HoursWeatherCollectionCell.swift */; };
+		05D801A2292AEB3100942716 /* WeatherLable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D801A1292AEB3100942716 /* WeatherLable.swift */; };
 		05E658E0292A5AE3004B6F0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E658DF292A5AE3004B6F0B /* AppDelegate.swift */; };
 		05E658E2292A5AE3004B6F0B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E658E1292A5AE3004B6F0B /* SceneDelegate.swift */; };
 		05E658E4292A5AE3004B6F0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E658E3292A5AE3004B6F0B /* ViewController.swift */; };
@@ -14,9 +17,13 @@
 		05E658E9292A5AE4004B6F0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05E658E8292A5AE4004B6F0B /* Assets.xcassets */; };
 		05E658EC292A5AE4004B6F0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05E658EA292A5AE4004B6F0B /* LaunchScreen.storyboard */; };
 		05E658F4292A64EB004B6F0B /* MockedWeatherData.strings in Resources */ = {isa = PBXBuildFile; fileRef = 05E658F3292A64EB004B6F0B /* MockedWeatherData.strings */; };
+		05E658F7292A86D5004B6F0B /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05E658F6292A86D5004B6F0B /* Inter.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05D8019C292AEA0100942716 /* HoursWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoursWeatherView.swift; sourceTree = "<group>"; };
+		05D8019E292AEA2100942716 /* HoursWeatherCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoursWeatherCollectionCell.swift; sourceTree = "<group>"; };
+		05D801A1292AEB3100942716 /* WeatherLable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLable.swift; sourceTree = "<group>"; };
 		05E658DC292A5AE3004B6F0B /* TestTaskXOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestTaskXOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05E658DF292A5AE3004B6F0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05E658E1292A5AE3004B6F0B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -26,6 +33,7 @@
 		05E658EB292A5AE4004B6F0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		05E658ED292A5AE4004B6F0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05E658F3292A64EB004B6F0B /* MockedWeatherData.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = MockedWeatherData.strings; sourceTree = "<group>"; };
+		05E658F6292A86D5004B6F0B /* Inter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Inter.ttf; path = ../../../../../Downloads/Inter/Inter.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,10 +47,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05D8019B292AE9BE00942716 /* HoursWeatherView */ = {
+			isa = PBXGroup;
+			children = (
+				05D8019C292AEA0100942716 /* HoursWeatherView.swift */,
+				05D8019E292AEA2100942716 /* HoursWeatherCollectionCell.swift */,
+			);
+			path = HoursWeatherView;
+			sourceTree = "<group>";
+		};
+		05D801A0292AEB1F00942716 /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				05D801A1292AEB3100942716 /* WeatherLable.swift */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
 		05E658D3292A5AE3004B6F0B = {
 			isa = PBXGroup;
 			children = (
-				05E658F3292A64EB004B6F0B /* MockedWeatherData.strings */,
 				05E658DE292A5AE3004B6F0B /* TestTaskXOne */,
 				05E658DD292A5AE3004B6F0B /* Products */,
 			);
@@ -59,6 +83,10 @@
 		05E658DE292A5AE3004B6F0B /* TestTaskXOne */ = {
 			isa = PBXGroup;
 			children = (
+				05D801A0292AEB1F00942716 /* CustomViews */,
+				05D8019B292AE9BE00942716 /* HoursWeatherView */,
+				05E658F5292A86C0004B6F0B /* font */,
+				05E658F3292A64EB004B6F0B /* MockedWeatherData.strings */,
 				05E658DF292A5AE3004B6F0B /* AppDelegate.swift */,
 				05E658E1292A5AE3004B6F0B /* SceneDelegate.swift */,
 				05E658E3292A5AE3004B6F0B /* ViewController.swift */,
@@ -68,6 +96,14 @@
 				05E658ED292A5AE4004B6F0B /* Info.plist */,
 			);
 			path = TestTaskXOne;
+			sourceTree = "<group>";
+		};
+		05E658F5292A86C0004B6F0B /* font */ = {
+			isa = PBXGroup;
+			children = (
+				05E658F6292A86D5004B6F0B /* Inter.ttf */,
+			);
+			path = font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05E658EC292A5AE4004B6F0B /* LaunchScreen.storyboard in Resources */,
+				05E658F7292A86D5004B6F0B /* Inter.ttf in Resources */,
 				05E658E9292A5AE4004B6F0B /* Assets.xcassets in Resources */,
 				05E658F4292A64EB004B6F0B /* MockedWeatherData.strings in Resources */,
 				05E658E7292A5AE3004B6F0B /* Main.storyboard in Resources */,
@@ -143,8 +180,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				05E658E4292A5AE3004B6F0B /* ViewController.swift in Sources */,
+				05D801A2292AEB3100942716 /* WeatherLable.swift in Sources */,
+				05D8019D292AEA0100942716 /* HoursWeatherView.swift in Sources */,
 				05E658E0292A5AE3004B6F0B /* AppDelegate.swift in Sources */,
 				05E658E2292A5AE3004B6F0B /* SceneDelegate.swift in Sources */,
+				05D8019F292AEA2100942716 /* HoursWeatherCollectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
