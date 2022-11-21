@@ -50,8 +50,8 @@ class WeatherForAWeekCell: UITableViewCell {
     
     func setupElements(viewModel: MainScreenDailyWeatherModel) {
         dayLabel.text = viewModel.day
-        maxTemperatureLabel.text = viewModel.maxTemperature
-        minTemperatureLabel.text = viewModel.minTemperature
+        maxTemperatureLabel.text = viewModel.maxTemperature.description
+        minTemperatureLabel.text = viewModel.minTemperature.description
         weaherIconImageView.image = viewModel.getIconImage()
     }
     

@@ -153,7 +153,7 @@ class WeatherViewController: UIViewController, MainScreenView {
         layoutTopLabels()
         configurator.configure(view: self)
         setTodayLabelText()
-        presenter.getSavedData()
+        presenter.getWeather()
     }
     
     override func viewDidAppear(_ animated: Bool) {

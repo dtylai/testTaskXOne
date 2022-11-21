@@ -114,32 +114,3 @@ class MainScreenPresenter: NSObject, MainScreenPresenterProtocol {
     
 }
 
-//MARK: - CLLocationManagerDelegate
-extension MainScreenPresenter: CLLocationManagerDelegate {
-    //trying to get user location and city
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        DispatchQueue.global().async { [unowned self] in
-            if let location = locations.first {
-                let url = self.urlManager.getURL(latitude: String(location.coordinate.latitude),
-                                                 longitude: String(location.coordinate.longitude))!
-                self.apiManager = ApiManager(url: url)
-                location.fetchCity { [unowned self] (city, error)  in
-                    if let city = city {
-                        self.city = city
-                    } else {
-                        self.city = "Not Found"
-                    }
-                    if !self.isgetWeatherFinished {
-                        self.getWeather()
-                    }
-                    self.isgetWeatherFinished = true
-                }
-            }
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        createErrorMessage(value: "Failed to determine location, please go to Settings and turn on the permissions", code: 6)
-    }
-    
-}
