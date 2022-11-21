@@ -57,16 +57,12 @@ class HoursWeatherCollectionCell: UICollectionViewCell {
         temperatureLabel.text = "4"
     }
 
-//    func setupElements(data: MainScreenHourlyWeatherModel?) {
-//        guard let data = data else { return }
-//        timeLabel.text = data.stringTime
-//        temperatureLabel.text = data.degrees
-//        weaherIconImageView.image = data.getIconImage()
-//        if data.icon == "rain" || data.icon == "snow" {
-//            chanceOfPrecipitationLabel.isHidden = false
-//            chanceOfPrecipitationLabel.text = data.precipProbability
-//        }
-    //}
+    func setupElements(data: MainScreenHourlyWeatherModel?) {
+        guard let data = data else { return }
+        timeLabel.text = data.stringTime
+        temperatureLabel.text = data.degrees
+        weaherIconImageView.image = data.getIconImage()
+    }
     
     private func layoutElements() {
         let stackView = UIStackView()

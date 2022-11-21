@@ -27,7 +27,7 @@ class WeatherByHoursView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        collectionView.register(WeatherByHoursCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherByHoursCell")
+        collectionView.register(HoursWeatherCollectionCell.self, forCellWithReuseIdentifier: "HoursWeatherCell")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
@@ -72,7 +72,7 @@ extension WeatherByHoursView: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherByHoursCell", for: indexPath) as! WeatherByHoursCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HoursWeatherCell", for: indexPath) as! HoursWeatherCollectionCell
         cell.setupElements(data: viewModel?[indexPath.row])
         cell.isUserInteractionEnabled = false
         return cell
