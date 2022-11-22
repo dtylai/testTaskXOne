@@ -15,31 +15,23 @@ class MainScreenPresenter: NSObject, MainScreenPresenterProtocol {
     
     var view: MainScreenView!
     
-    private var apiManager: JSONManager!
+    private var apiManager = JSONManager()
     private var isErrorMessageWasShown = false
     private var isgetWeatherFinished = false
     
     override init() {
         super.init()
-
+        
     }
     
     @objc func getWeather() {
-            apiManager.getWeather {[unowned self] (weather) in
-                switch weather {
-                case .Success(let weatherData):
-                    let mainScreenWeatherModel = self.weatherToMainScreenWeatherModel(weather: weatherData)
-                    DispatchQueue.main.async {
-                        self.findBackroundColorToMainScreen(iconName:
-                            mainScreenWeatherModel.mainScreenHourlyWeatherModel[0].icon)
-                        self.view.displayWeather(mainScreenWeatherModel: mainScreenWeatherModel)
-                    }
-                case .Fail(let error):
-                    DispatchQueue.main.async {
-                        self.view.displayErrorMessage(errorMessage: error.localizedDescription)
-                    }
-                }
-            }
+        let mainScreenWeatherModel = self.weatherToMainScreenWeatherModel(weather: apiManager.getWeather()!)
+        DispatchQueue.main.async {
+           // self.findBackroundColorToMainScreen(iconName: mainScreenWeatherModel.mainScreenHourlyWeatherModel[0].icon)
+            self.findBackroundColorToMainScreen(iconName: mainScreenWeatherModel.mainScreenHourlyWeatherModel.hourly[0].icon)
+            self.view.displayWeather(mainScreenWeatherModel: mainScreenWeatherModel)
+        }
+        
     }
     
     private func findBackroundColorToMainScreen(iconName: String) {
@@ -76,21 +68,22 @@ class MainScreenPresenter: NSObject, MainScreenPresenterProtocol {
         let error = NSError(domain: "ApiManager.domain", code: code, userInfo: userInfo)
         self.view.displayErrorMessage(errorMessage: error.localizedDescription)
     }
-//    view.setBackroundColor(bacgroundColorCase: bacgroundColorCase)
-//    view.displayWeather(mainScreenWeatherModel: weaher)
-
+    //    view.setBackroundColor(bacgroundColorCase: bacgroundColorCase)
+    //    view.displayWeather(mainScreenWeatherModel: weaher)
+    
     
     // convert Weather to MainScreenWeatherModel
     private func weatherToMainScreenWeatherModel(weather: Weather) -> MainScreenWeatherModel {
         let mainScreenCurrentWeatherModel = MainScreenCurrentWeatherModel(city: weather.city, temperature: weather.temperature)
         // hourly weatherModel
+        
         var mainScreenHourlyWeather: [MainScreenHourlyWeatherModel] = []
         var sunriseTime: Double!
         var sunsetTime: Double!
         
         
         for weather in weather.weatherPerDay {
-
+            
             let mainScreenHourlyWeatherModel = MainScreenHourlyWeatherModel(stringTime: weather.timestamp, icon: weather.weatherType, degrees: weather.temperature)
             if let sunset = weather.sunset {
                 let sunSetMainScreenHourlyWeatherModel = MainScreenHourlyWeatherModel(stringTime: weather.timestamp, icon: "sunset", degrees: "Заход солнца")
@@ -100,15 +93,17 @@ class MainScreenPresenter: NSObject, MainScreenPresenterProtocol {
         }
         mainScreenHourlyWeather[0].stringTime = "Сейчас"
         
+        let mainScreenH = MainScreenHourly(description: weather.weatherDescription, hourly: mainScreenHourlyWeather)
+        
         // daily weatherModel
         var mainScreenDailyWeather: [MainScreenDailyWeatherModel] = []
         for weather in weather.forecast {
-
+            
             let mainScreenDailyWeatherModel = MainScreenDailyWeatherModel(day: weather.getDay(), icon: weather.weatherType, maxTemperature: weather.maxTemperature, minTemperature: weather.minTemperature)
             mainScreenDailyWeather.append(mainScreenDailyWeatherModel)
         }
         mainScreenDailyWeather[0].day = "Сегодня"
-        let mainScreenWeatherModel = MainScreenWeatherModel(mainScreenCurrentWeatherModel: mainScreenCurrentWeatherModel, mainScreenHourlyWeatherModel: mainScreenHourlyWeather, mainScreenDailyWeatherModel: mainScreenDailyWeather)
+        let mainScreenWeatherModel = MainScreenWeatherModel(mainScreenCurrentWeatherModel: mainScreenCurrentWeatherModel, mainScreenHourlyWeatherModel: mainScreenH, mainScreenDailyWeatherModel: mainScreenDailyWeather)
         return mainScreenWeatherModel
     }
     

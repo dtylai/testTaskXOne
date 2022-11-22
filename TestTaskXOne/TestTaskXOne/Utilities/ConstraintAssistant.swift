@@ -28,7 +28,7 @@ class ConstraintAssistant {
     static let shared = ConstraintAssistant()
     private init(){}
     
-    private func addContraint(view1: UIView, view2: UIView?, size: Double, typeOfConstraints: TypeOfContraints) {
+     func addContraint(view1: UIView, view2: UIView?, size: Double, typeOfConstraints: TypeOfContraints) {
         switch typeOfConstraints {
         case .topToBottom:
             guard let view2 = view2 else {

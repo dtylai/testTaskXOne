@@ -13,12 +13,12 @@ enum WeatherData {
 }
 
 protocol JSONManagerProtocol {
-    func getWeather(completion: @escaping((WeatherData)->Void))
+    func getWeather() -> Weather?
 }
 
 class JSONManager: JSONManagerProtocol {
     
-    private let jsonFielName = "TestTaskJSON"
+    private let jsonFielName = "JSONF"
     private func readLocalFile(forName name: String) -> Data? {
         do {
             if let bundlePath = Bundle.main.path(forResource: name,
@@ -33,22 +33,14 @@ class JSONManager: JSONManagerProtocol {
         return nil
     }
     
-    func getWeather(completion: @escaping((WeatherData)->Void)) {
+    func getWeather() -> Weather? {
         guard let jsonData = readLocalFile(forName: jsonFielName) else {
-            return
+            return nil
         }
         let decoder = JSONDecoder()
-        do {
-            let weather = try decoder.decode(Weather.self, from: jsonData)
-            completion(.Success(weather))
-        } catch {
-            print(error)
-            let userInfo = [
-                NSLocalizedDescriptionKey : NSLocalizedString("fail", value: "There are some mistakes with data",
-                                                              comment: "")
-            ]
-            let error = NSError(domain: "TestTaskXone.com", code: 202, userInfo: userInfo)
-            completion(.Fail(error))
-        }
+        
+            let weather = try? decoder.decode(Weather.self, from: jsonData)
+       // print(weather)
+            return weather
     }
 }

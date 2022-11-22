@@ -9,7 +9,7 @@ import UIKit
 
 struct MainScreenWeatherModel: Codable {
     let mainScreenCurrentWeatherModel: MainScreenCurrentWeatherModel
-    let mainScreenHourlyWeatherModel: [MainScreenHourlyWeatherModel]
+    let mainScreenHourlyWeatherModel: MainScreenHourly
     let mainScreenDailyWeatherModel: [MainScreenDailyWeatherModel]
 }
 
@@ -23,10 +23,15 @@ struct MainScreenCurrentWeatherModel: Codable {
     }
 }
 
+struct MainScreenHourly: Codable {
+    let description: String
+    let hourly: [MainScreenHourlyWeatherModel]
+}
 struct MainScreenHourlyWeatherModel: Codable {
     var stringTime: String
     let icon: String
     let degrees: String
+    
     
     func getIconImage() -> UIImage {
         let iconCase = WeatherIconCases(value: icon)

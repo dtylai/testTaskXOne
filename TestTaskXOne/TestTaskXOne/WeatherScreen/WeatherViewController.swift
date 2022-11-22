@@ -9,9 +9,9 @@
 import UIKit
 
 fileprivate struct Constants {
-    static let tempretureSectionHeight: CGFloat = 120
+    static let tempretureSectionHeight: CGFloat = 100
     static let offsetHeight: CGFloat = UIScreen.main.bounds.height/5
-    static let numberOfRowsInSection = 7
+    static let numberOfRowsInSection = 1
     static let heightForFirstRow: CGFloat = 40
     static let heightForMainContentCells: CGFloat = 55
     static let bottomContentViewHeight: CGFloat = 30
@@ -77,12 +77,7 @@ class WeatherViewController: UIViewController, MainScreenView {
     private let cityLabel: WeatherLabel = {
         let label = WeatherLabel()
         label.text = "loading"
-        label.font = UIFont.systemFont(ofSize: 32)
-        return label
-    }()
-    private let shortInfoAboutWeatherLabel: WeatherLabel = {
-        let label = WeatherLabel()
-        label.text = "-"
+        label.font = UIFont.systemFont(ofSize: 30)
         return label
     }()
     private let temperatureLabel: WeatherLabel = {
@@ -90,37 +85,14 @@ class WeatherViewController: UIViewController, MainScreenView {
         label.text = "0"
         var fontSize: CGFloat!
         if UIScreen.main.bounds.width > Constants.defaultScreenWidth {
-            fontSize = 100
+            fontSize = 30
         } else {
-            fontSize = 90
+            fontSize = 30
         }
         label.font = UIFont.systemFont(ofSize: fontSize, weight: .thin)
         return label
     }()
-    private let todayLabel: UILabel = {
-        let label = WeatherLabel()
-        label.text = "-"
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        return label
-    }()
-    private let todayStaticLabel: WeatherLabel = {
-        let label = WeatherLabel()
-        label.text = "TODAY"
-        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        return label
-    }()
-    private let maxTemperatureLabel: WeatherLabel = {
-        let label = WeatherLabel()
-        label.text = "-"
-        label.font = UIFont.systemFont(ofSize: 18)
-        return label
-    }()
-    private let minTemperatureLabel: WeatherLabel = {
-        let label = WeatherLabel()
-        label.textColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.65)
-        label.font = UIFont.systemFont(ofSize: 18)
-        return label
-    }()
+
     
     private var viewModel: MainScreenWeatherModel?
     
@@ -150,9 +122,8 @@ class WeatherViewController: UIViewController, MainScreenView {
         layoutTopContentView()
         bottomViewLayout()
         layoutTableView()
-        layoutTopLabels()
+        //layoutTopLabels()
         configurator.configure(view: self)
-        setTodayLabelText()
         presenter.getWeather()
     }
     
@@ -164,14 +135,10 @@ class WeatherViewController: UIViewController, MainScreenView {
         // setup labels
         cityLabel.text = mainScreenWeatherModel.mainScreenCurrentWeatherModel.city
         temperatureLabel.text = mainScreenWeatherModel.mainScreenCurrentWeatherModel.temperature
-        todayLabel.text = MainScreenCurrentWeatherModel.getCurrentDay()
-        shortInfoAboutWeatherLabel.text = mainScreenWeatherModel.mainScreenCurrentWeatherModel.sammery
-        maxTemperatureLabel.text = mainScreenWeatherModel.mainScreenCurrentWeatherModel.maxTemperature
-        minTemperatureLabel.text = mainScreenWeatherModel.mainScreenCurrentWeatherModel.minTemperature
         // setup viewModel and reload tableView
         viewModel = mainScreenWeatherModel
+     //   weatherByHoursView.backgroundColor = .red
         weatherByHoursView.viewModel = mainScreenWeatherModel.mainScreenHourlyWeatherModel
-        createDataArrayForMainSection()
         tableView.reloadData()
     }
     
@@ -191,39 +158,38 @@ class WeatherViewController: UIViewController, MainScreenView {
         bottomView.backgroundColor = color
     }
     
-    private func setTodayLabelText() {
-        let hour = Calendar.current.component(.hour, from: Date())
-        switch hour {
-        case 6..<12:
-            todayStaticLabel.text = "TODAY"
-        default:
-            todayStaticLabel.text = "TONIGHT"
-        }
-    }
     
     //MARK: - Layout elements
     
     private func layoutTopContentView() {
         view.addSubview(topContentView)
         topContentView.backgroundColor = .clear
-        topContentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 12).isActive = true
+        topContentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         topContentView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height/5.5).isActive = true
         topContentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         topContentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
         // stackView for labels setup
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 4
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(cityLabel)
-        stackView.addArrangedSubview(shortInfoAboutWeatherLabel)
+//        let stackView = UIStackView()
+//        stackView.axis = .vertical
+//        stackView.alignment = .center
+//        stackView.distribution = .equalSpacing
+//        stackView.spacing = 4
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        stackView.addArrangedSubview(cityLabel)
+//
+        topContentView.addSubview(cityLabel)
+//        stackView.centerXAnchor.constraint(equalTo: topContentView.centerXAnchor).isActive = true
+//        stackView.bottomAnchor.constraint(equalTo: topContentView.bottomAnchor, constant: -20).isActive = true
+        ConstraintAssistant.shared.addContraint(view1: cityLabel, view2: topContentView, size: 60, typeOfConstraints: .topToTop)
+        ConstraintAssistant.shared.addContraint(view1: cityLabel, view2: view, size: 0, typeOfConstraints: .centerXAnchor)
         
-        topContentView.addSubview(stackView)
-        stackView.centerXAnchor.constraint(equalTo: topContentView.centerXAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: topContentView.bottomAnchor, constant: -20).isActive = true
+        topContentView.addSubview(temperatureLabel)
+//        stackView.centerXAnchor.constraint(equalTo: topContentView.centerXAnchor).isActive = true
+//        stackView.bottomAnchor.constraint(equalTo: topContentView.bottomAnchor, constant: -20).isActive = true
+        ConstraintAssistant.shared.addContraint(view1: temperatureLabel, view2: cityLabel, size: 6, typeOfConstraints: .topToBottom)
+        ConstraintAssistant.shared.addContraint(view1: temperatureLabel, view2: view, size: 0, typeOfConstraints: .centerXAnchor)
+        
     }
     
     // weatherByHoursView topAnchor (if the view reachs the top, Anchor will be changed)
@@ -246,7 +212,7 @@ class WeatherViewController: UIViewController, MainScreenView {
         backgroundView.bottomAnchor.constraint(equalTo: weatherByHoursView.bottomAnchor).isActive = true
         
         weatherByHoursView.translatesAutoresizingMaskIntoConstraints = false
-        weatherByHoursView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        weatherByHoursView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         weatherByHoursView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         weatherByHoursView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         topAnchor = weatherByHoursView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
@@ -255,41 +221,26 @@ class WeatherViewController: UIViewController, MainScreenView {
         
     }
     
-    private func layoutTopLabels() {
-        view.addSubview(temperatureLabel)
-        temperatureLabel.topAnchor.constraint(equalTo: topContentView.bottomAnchor)
-            .isActive = true
-        temperatureLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        
-        // layout minTemperatureLabel and maxTemperatureLabel
-        let minMaxLabelsStackView = UIStackView()
-        minMaxLabelsStackView.axis = .horizontal
-        minMaxLabelsStackView.alignment = .center
-        minMaxLabelsStackView.distribution = .equalSpacing
-        minMaxLabelsStackView.spacing = 15
-        minMaxLabelsStackView.translatesAutoresizingMaskIntoConstraints = false
-        minMaxLabelsStackView.addArrangedSubview(maxTemperatureLabel)
-        minMaxLabelsStackView.addArrangedSubview(minTemperatureLabel)
-        
-        tableView.addSubview(minMaxLabelsStackView)
-        minMaxLabelsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15).isActive = true
-        minMaxLabelsStackView.bottomAnchor.constraint(equalTo: weatherByHoursView.topAnchor, constant: -15).isActive = true
-        
-        // layout todayLabel and todayStaticLabel
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .leading
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 5
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(todayLabel)
-        stackView.addArrangedSubview(todayStaticLabel)
-        
-        tableView.addSubview(stackView)
-        stackView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 15).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: weatherByHoursView.topAnchor, constant: -15).isActive = true
-        todayStaticLabel.centerYAnchor.constraint(equalTo: todayLabel.centerYAnchor).isActive = true
-    }
+//    private func layoutTopLabels() {
+//        view.addSubview(temperatureLabel)
+//        temperatureLabel.topAnchor.constraint(equalTo: topContentView.bottomAnchor)
+//            .isActive = true
+//        temperatureLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+//
+//
+//
+//        // layout todayLabel and todayStaticLabel
+//        let stackView = UIStackView()
+//        stackView.axis = .horizontal
+//        stackView.alignment = .leading
+//        stackView.distribution = .equalSpacing
+//        stackView.spacing = 5
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//
+//        tableView.addSubview(stackView)
+//        stackView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 15).isActive = true
+//        stackView.bottomAnchor.constraint(equalTo: weatherByHoursView.topAnchor, constant: -15).isActive = true
+//    }
     
     private func bottomViewLayout() {
         let safeBottomAnchor = view.layoutMarginsGuide.bottomAnchor
@@ -308,52 +259,6 @@ class WeatherViewController: UIViewController, MainScreenView {
         bottomSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
     
-    // create an array for weatherDataCell
-    private var mainSectionData: [MainSectionData]?
-    func createDataArrayForMainSection() {
-        guard let viewModel = viewModel else { return }
-        mainSectionData = []
-        for number in 0...4 {
-            var leftTitleText = ""
-            var rightTitleText = ""
-            var leftText = ""
-            var rightText = ""
-            switch number {
-            case 0:
-                leftTitleText = "SUNRISE"
-                rightTitleText = "SUNSET"
-                leftText = viewModel.mainContentWeatherModel.sunrise
-                rightText = viewModel.mainContentWeatherModel.sunset
-            case 1:
-                leftTitleText = "CHANCE OF RAIN"
-                rightTitleText = "HUMIDITY"
-                leftText = viewModel.mainContentWeatherModel.chanceOfRain
-                rightText = viewModel.mainContentWeatherModel.humidity
-            case 2:
-                leftTitleText = "WIND"
-                rightTitleText = "FEELS LIKE"
-                leftText = viewModel.mainContentWeatherModel.wind
-                rightText = viewModel.mainContentWeatherModel.feelsLike
-            case 3:
-                leftTitleText = "PRECIPITATION"
-                rightTitleText = "PRESSURE"
-                leftText = viewModel.mainContentWeatherModel.precipitation
-                rightText = viewModel.mainContentWeatherModel.pressure
-            case 4:
-                leftTitleText = "VISIBILITY"
-                rightTitleText = "UV INDEX"
-                leftText = viewModel.mainContentWeatherModel.visiblity
-                rightText = viewModel.mainContentWeatherModel.uvIndex
-            default:
-                break
-            }
-            let data = MainSectionData(leftTitleText: leftTitleText,
-                                       rightTitleText: rightTitleText,
-                                       leftText: leftText,
-                                       rightText: rightText)
-            mainSectionData?.append(data)
-        }
-    }
 }
 
 
@@ -366,111 +271,85 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell!
-        switch indexPath.row {
-        case 0:
+
             cell = WeatherForAWeekTableViewCell()
             (cell as! WeatherForAWeekTableViewCell).viewModel = viewModel?.mainScreenDailyWeatherModel
-        case 1...4:
-            cell = WeatherDataCell()
-            if let mainSectionData = mainSectionData {
-                (cell as! WeatherDataCell).setupElements(mainSectionData: mainSectionData[indexPath.row-2])
-            }
-        case 5:
-            // WeatherDataCell without bottomSeparator
-            cell = WeatherDataCell()
-            if let mainSectionData = mainSectionData {
-                (cell as! WeatherDataCell).setupElements(mainSectionData: mainSectionData[indexPath.row-2],
-                                                         hideBottomSeparator: true)
-            }
-        default:
-            cell = UITableViewCell()
-        }
+
         cell.backgroundColor = .clear
         cell.isUserInteractionEnabled = false
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-      switch indexPath.row {
-        case 0:
+
             return CGFloat(viewModel?.mainScreenDailyWeatherModel.count ?? 7)*Constants.heightForFirstRow
-        case 1:
-            return UITableView.automaticDimension
-        default:
-            return Constants.heightForMainContentCells
-        }
+
     }
     
 }
 
-//MARK: - ScrollViewDelegate
-extension WeatherViewController: UIScrollViewDelegate {
-    
-    // culculate alpha depending on the scrollView offset
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offset = -scrollView.contentOffset.y
-        var alpha = 1 * (offset-Constants.tempretureSectionHeight) / (Constants.offsetHeight)
-        var temperatureAplha = alpha
-        // if scrollView has riched the top change topAnchor
-        if offset <= Constants.tempretureSectionHeight {
-            stopHourlyWeatherSection()
-        } else {
-            attachHourlyWeathernToTableView()
-        }
-        if alpha < 1 {
-            temperatureAplha-=0.55
-            alpha-=0.60
-        }
-        minTemperatureLabel.alpha = alpha
-        maxTemperatureLabel.alpha = alpha
-        todayStaticLabel.alpha = alpha
-        todayLabel.alpha = alpha
-        temperatureLabel.alpha = temperatureAplha
-    }
-    
-    // if user stops scrolling scrollView and doesn't reach the top - scroll to the top
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let offset = -scrollView.contentOffset.y
-        if (offset > Constants.tempretureSectionHeight
-            && offset < (Constants.offsetHeight+Constants.tempretureSectionHeight))
-            && isTopAnchorConnectedToTableView {
-            UIView.animate(withDuration: 0.2, animations: { [unowned self] in
-                self.todayStaticLabel.alpha = 0
-                self.todayLabel.alpha = 0
-                self.temperatureLabel.alpha = 0
-                scrollView.contentOffset = CGPoint(x: 0, y: -Constants.tempretureSectionHeight)
-            }) { [unowned self] (isComlited) in
-                if isComlited {
-                    self.isTopAnchorConnectedToTableView = false
-                }
-            }
-        }
-    }
-    
-    // attach object to topView
-    fileprivate func stopHourlyWeatherSection() {
-        if isTopAnchorConnectedToTableView {
-            if let topAnchor = topAnchor {
-                topAnchor.isActive = false
-            }
-            topAnchor = weatherByHoursView.topAnchor.constraint(equalTo: topContentView.bottomAnchor)
-            topAnchor?.isActive = true
-            isTopAnchorConnectedToTableView = false
-        }
-    }
-    
-    // attach object to tableView back
-    fileprivate func attachHourlyWeathernToTableView() {
-        if !isTopAnchorConnectedToTableView {
-            if let topAnchor = topAnchor {
-                topAnchor.isActive = false
-            }
-            topAnchor = weatherByHoursView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
-            topAnchor?.isActive = true
-            isTopAnchorConnectedToTableView = true
-        }
-    }
-}
+////MARK: - ScrollViewDelegate
+//extension WeatherViewController: UIScrollViewDelegate {
+//
+//    // culculate alpha depending on the scrollView offset
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let offset = -scrollView.contentOffset.y
+//        var alpha = 1 * (offset-Constants.tempretureSectionHeight) / (Constants.offsetHeight)
+//        var temperatureAplha = alpha
+//        // if scrollView has riched the top change topAnchor
+//        if offset <= Constants.tempretureSectionHeight {
+//            stopHourlyWeatherSection()
+//        } else {
+//            attachHourlyWeathernToTableView()
+//        }
+//        if alpha < 1 {
+//            temperatureAplha-=0.55
+//            alpha-=0.60
+//        }
+//        temperatureLabel.alpha = temperatureAplha
+//    }
+//
+//    // if user stops scrolling scrollView and doesn't reach the top - scroll to the top
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        let offset = -scrollView.contentOffset.y
+//        if (offset > Constants.tempretureSectionHeight
+//            && offset < (Constants.offsetHeight+Constants.tempretureSectionHeight))
+//            && isTopAnchorConnectedToTableView {
+//            UIView.animate(withDuration: 0.2, animations: { [unowned self] in
+//                self.temperatureLabel.alpha = 0
+//                scrollView.contentOffset = CGPoint(x: 0, y: -Constants.tempretureSectionHeight)
+//            }) { [unowned self] (isComlited) in
+//                if isComlited {
+//                    self.isTopAnchorConnectedToTableView = false
+//                }
+//            }
+//        }
+//    }
+//
+//    // attach object to topView
+//    fileprivate func stopHourlyWeatherSection() {
+//        if isTopAnchorConnectedToTableView {
+//            if let topAnchor = topAnchor {
+//                topAnchor.isActive = false
+//            }
+//            topAnchor = weatherByHoursView.topAnchor.constraint(equalTo: topContentView.bottomAnchor)
+//            topAnchor?.isActive = true
+//            isTopAnchorConnectedToTableView = false
+//        }
+//    }
+//
+//    // attach object to tableView back
+//    fileprivate func attachHourlyWeathernToTableView() {
+//        if !isTopAnchorConnectedToTableView {
+//            if let topAnchor = topAnchor {
+//                topAnchor.isActive = false
+//            }
+//            topAnchor = weatherByHoursView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
+//            topAnchor?.isActive = true
+//            isTopAnchorConnectedToTableView = true
+//        }
+//    }
+//}
 
 //import UIKit
 //
