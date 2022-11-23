@@ -27,6 +27,9 @@ class WeatherForAWeekTableViewCell: UITableViewCell {
         tableView.register(TitleCell.self, forCellReuseIdentifier: "titleCell")
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
+        //rgba(110, 120, 135, 1)
+        tableView.separatorColor = UIColor(red: 110/255.0, green: 120/255.0, blue: 135/255.0, alpha: 1)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
         return tableView
     }()
     

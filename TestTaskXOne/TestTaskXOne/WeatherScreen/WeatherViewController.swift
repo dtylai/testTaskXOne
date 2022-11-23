@@ -12,7 +12,7 @@ fileprivate struct Constants {
     static let tempretureSectionHeight: CGFloat = 100
     static let offsetHeight: CGFloat = UIScreen.main.bounds.height/5
     static let numberOfRowsInSection = 1
-    static let heightForFirstRow: CGFloat = 47
+    static let heightForFirstRow: CGFloat = 49
     static let heightForMainContentCells: CGFloat = 55
     static let bottomContentViewHeight: CGFloat = 30
 }
@@ -89,6 +89,7 @@ class WeatherViewController: UIViewController, MainScreenView {
     override func viewDidAppear(_ animated: Bool) {
         tableView.contentOffset = CGPoint(x: 0, y: -(Constants.offsetHeight+Constants.tempretureSectionHeight))
     }
+    
     func gradient(initialColor: UIColor, middleColor: UIColor,
                   finalColor: UIColor) -> CAGradientLayer {
         let gradient = CAGradientLayer()
@@ -146,6 +147,8 @@ class WeatherViewController: UIViewController, MainScreenView {
         tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: bottomView.topAnchor).isActive = true
         tableView.addSubview(weatherByHoursView)
+        tableView.separatorStyle = .none
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 0))
         
         weatherByHoursView.backgroundColor = UIColor(red: 60/255.0, green: 78/255.0, blue: 101/255.0, alpha: 0.6)
         weatherByHoursView.translatesAutoresizingMaskIntoConstraints = false
@@ -183,6 +186,8 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell = WeatherForAWeekTableViewCell()
         (cell as! WeatherForAWeekTableViewCell).viewModel = viewModel?.mainScreenDailyWeatherModel
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
         cell.backgroundColor = UIColor(red: 60/255.0, green: 78/255.0, blue: 101/255.0, alpha: 0.6)
         cell.isUserInteractionEnabled = false
         return cell

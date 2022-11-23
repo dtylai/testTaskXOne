@@ -11,7 +11,7 @@ class SeparatorView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.6)
+        backgroundColor = UIColor(red: 110/255.0, green: 120/255.0, blue: 135/255.0, alpha: 1)
     }
     
     required init?(coder: NSCoder) {
