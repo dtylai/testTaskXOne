@@ -8,7 +8,6 @@
 import UIKit
 
 @IBDesignable class LabelWithPaddings: WeatherLabel {
-
     @IBInspectable var topInset: CGFloat = 10
     @IBInspectable var bottomInset: CGFloat = 10
     @IBInspectable var leftInset: CGFloat = 15

@@ -50,12 +50,14 @@ struct Forecast: Codable {
     let date: String
     let minTemperature, maxTemperature: Int
     let weatherType: String
+    let chance: String?
     
     enum CodingKeys: String, CodingKey {
         case date
         case minTemperature = "min_temperature"
         case maxTemperature = "max_temperature"
         case weatherType = "weather_type"
+        case chance
     }
     
     func getDay() -> String {

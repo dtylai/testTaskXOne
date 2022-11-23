@@ -17,8 +17,8 @@ protocol JSONManagerProtocol {
 }
 
 class JSONManager: JSONManagerProtocol {
-    
     private let jsonFielName = "JSONF"
+    
     private func readLocalFile(forName name: String) -> Data? {
         do {
             if let bundlePath = Bundle.main.path(forResource: name,
@@ -29,7 +29,6 @@ class JSONManager: JSONManagerProtocol {
         } catch {
             print(error)
         }
-        
         return nil
     }
     
@@ -38,9 +37,7 @@ class JSONManager: JSONManagerProtocol {
             return nil
         }
         let decoder = JSONDecoder()
-        
-            let weather = try? decoder.decode(Weather.self, from: jsonData)
-       // print(weather)
-            return weather
+        let weather = try? decoder.decode(Weather.self, from: jsonData)
+        return weather
     }
 }

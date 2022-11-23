@@ -8,12 +8,12 @@
 import UIKit
 
 class WeatherByHoursView: UIView {
-
     let topSeparatorView = SeparatorView()
     let bottomSeparatorView = SeparatorView()
     let descriptionLable = UILabel()
     var viewModel: MainScreenHourly? {
         didSet {
+            descriptionLable.font = UIFont(name: "Inter-Regular_Medium", size: 14)
             descriptionLable.text = viewModel?.description
             collectionView.reloadData()
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0),
@@ -28,11 +28,11 @@ class WeatherByHoursView: UIView {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
         collectionView.register(HoursWeatherCollectionCell.self, forCellWithReuseIdentifier: "HoursWeatherCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = backgroundColor
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
@@ -43,6 +43,8 @@ class WeatherByHoursView: UIView {
         descriptionLable.translatesAutoresizingMaskIntoConstraints = false
         descriptionLable.textColor = .white
         descriptionLable.numberOfLines = 2
+        backgroundColor = .red
+        layer.cornerRadius = 14
     }
     
     required init?(coder: NSCoder) {
@@ -51,22 +53,22 @@ class WeatherByHoursView: UIView {
     
     private func layoutElements() {
         addSubview(descriptionLable)
-        descriptionLable.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        descriptionLable.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        descriptionLable.topAnchor.constraint(equalTo: topAnchor, constant: 14).isActive = true
+        descriptionLable.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
         descriptionLable.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        descriptionLable.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        //descriptionLable.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
         addSubview(bottomSeparatorView)
-        bottomSeparatorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        bottomSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        bottomSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        bottomSeparatorView.topAnchor.constraint(equalTo: descriptionLable.bottomAnchor, constant: 14).isActive = true
+        bottomSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
+        bottomSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14).isActive = true
         bottomSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         addSubview(collectionView)
-        collectionView.topAnchor.constraint(equalTo: descriptionLable.bottomAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: bottomSeparatorView.bottomAnchor).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: bottomSeparatorView.topAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
 }
 
@@ -84,26 +86,11 @@ extension WeatherByHoursView: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        30
+        25
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        30
+        27
     }
-    
 }
-//addSubview(descriptionLable)
-//ConstraintAssistant.shared.addContraint(view1: descriptionLable, view2: self, size: 14, typeOfConstraints: .topToTop)
-//ConstraintAssistant.shared.addContraint(view1: descriptionLable, view2: self, size: 14, typeOfConstraints: .leftToLeft)
-//ConstraintAssistant.shared.addContraint(view1: descriptionLable, view2: self, size: 40, typeOfConstraints: .rightToRight)
-//
-//addSubview(midleSeparatorView)
-//ConstraintAssistant.shared.addContraint(view1: midleSeparatorView, view2: descriptionLable, size: 14, typeOfConstraints: .topToBottom)
-//ConstraintAssistant.shared.addContraint(view1: midleSeparatorView, view2: self, size: 14, typeOfConstraints: .leftToLeft)
-//ConstraintAssistant.shared.addContraint(view1: midleSeparatorView, view2: self, size: 15, typeOfConstraints: .rightToRight)
-//
-//addSubview(collectionView)
-//ConstraintAssistant.shared.addContraint(view1: collectionView, view2: midleSeparatorView, size: 14, typeOfConstraints: .topToBottom)
-//ConstraintAssistant.shared.addContraint(view1: collectionView, view2: self, size: 14, typeOfConstraints: .leftToLeft)
-//ConstraintAssistant.shared.addContraint(view1: collectionView, view2: self, size: 15, typeOfConstraints: .rightToRight)
-//ConstraintAssistant.shared.addContraint(view1: collectionView, view2: self, size: 20, typeOfConstraints: .botttomToBottom)

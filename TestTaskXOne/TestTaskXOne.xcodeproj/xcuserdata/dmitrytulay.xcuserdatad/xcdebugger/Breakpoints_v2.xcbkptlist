@@ -55,22 +55,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CBDEE86D-51EF-4F6A-9EF7-1495974773C4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestTaskXOne/WeatherScreen/WeatherViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
-            landmarkName = "layoutTopContentView()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "FA327195-6D02-480F-A503-DD60EB4D47C4"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -78,8 +62,8 @@
             filePath = "TestTaskXOne/Utilities/JSONManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
             landmarkName = "getWeather()"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +78,8 @@
             filePath = "TestTaskXOne/Utilities/JSONManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "getWeather()"
             landmarkType = "7">
          </BreakpointContent>
@@ -114,6 +98,86 @@
             endingLineNumber = "22"
             landmarkName = "readLocalFile(forName:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1B1D6977-5C9A-460F-83C5-57655847853A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestTaskXOne/WeatherTableViewContentCell/WeatherForAWeek/WeatherForAWeekCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "setupElements(viewModel:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1B1D6977-5C9A-460F-83C5-57655847853A - 9b66e319110a8f06"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestTaskXOne.WeatherForAWeekCell.setupElements(viewModel: TestTaskXOne.MainScreenDailyWeatherModel) -&gt; ()"
+                  moduleName = "TestTaskXOne"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitrytulay/Desktop/TestTaskXOne/TestTaskXOne/TestTaskXOne/WeatherTableViewContentCell/WeatherForAWeek/WeatherForAWeekCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "81">
+               </Location>
+               <Location
+                  uuid = "1B1D6977-5C9A-460F-83C5-57655847853A - 9b66e319110a8f06"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestTaskXOne.WeatherForAWeekCell.setupElements(viewModel: TestTaskXOne.MainScreenDailyWeatherModel) -&gt; ()"
+                  moduleName = "TestTaskXOne"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitrytulay/Desktop/TestTaskXOne/TestTaskXOne/TestTaskXOne/WeatherTableViewContentCell/WeatherForAWeek/WeatherForAWeekCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "123">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "284FF1AB-4220-4C64-B48C-F4C5F24933DE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestTaskXOne/HoursWeatherView/HoursWeatherView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "collectionView"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6F047FAA-1786-4028-916D-9DC3C446D3B4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestTaskXOne/HoursWeatherView/HoursWeatherView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "collectionView"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

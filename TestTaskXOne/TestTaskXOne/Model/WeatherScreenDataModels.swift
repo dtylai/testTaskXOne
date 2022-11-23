@@ -27,11 +27,11 @@ struct MainScreenHourly: Codable {
     let description: String
     let hourly: [MainScreenHourlyWeatherModel]
 }
+
 struct MainScreenHourlyWeatherModel: Codable {
     var stringTime: String
     let icon: String
     let degrees: String
-    
     
     func getIconImage() -> UIImage {
         let iconCase = WeatherIconCases(value: icon)
@@ -45,6 +45,7 @@ struct MainScreenDailyWeatherModel: Codable {
     let icon: String
     let maxTemperature: Int
     let minTemperature: Int
+    let chance: String?
     
     func getIconImage() -> UIImage {
         let iconCase = WeatherIconCases(value: icon)

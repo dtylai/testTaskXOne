@@ -8,33 +8,32 @@
 import UIKit
 
 fileprivate struct Constants {
-    static let cellHeight: CGFloat = 40
+    static let cellHeight: CGFloat = 47
 }
 
 class WeatherForAWeekTableViewCell: UITableViewCell {
-    
     let bottomSeparatorView = SeparatorView()
     var viewModel: [MainScreenDailyWeatherModel]? {
         didSet {
             weatherTableView.reloadData()
         }
     }
-    
     private lazy var weatherTableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(WeatherForAWeekCell.self, forCellReuseIdentifier: "weatherForAWeekCell")
+        tableView.register(TitleCell.self, forCellReuseIdentifier: "titleCell")
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
-        tableView.separatorStyle = .none
         return tableView
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutElements()
+        layer.cornerRadius = 14
     }
     
     required init?(coder: NSCoder) {
@@ -62,15 +61,25 @@ extension WeatherForAWeekTableViewCell: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "weatherForAWeekCell", for: indexPath) as! WeatherForAWeekCell
-        cell.backgroundColor = .clear
-        if let data = viewModel?[indexPath.row] {
-            cell.setupElements(viewModel: data)
+        switch indexPath.row {
+        case 0:
+            let cell = TitleCell()
+            cell.backgroundColor = .clear
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "weatherForAWeekCell", for: indexPath) as! WeatherForAWeekCell
+            cell.backgroundColor = .clear
+            if let data = viewModel?[indexPath.row] {
+                cell.setupElements(viewModel: data)
+            }
+            return cell
         }
-        return cell
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         Constants.cellHeight
     }
+    
 }
+

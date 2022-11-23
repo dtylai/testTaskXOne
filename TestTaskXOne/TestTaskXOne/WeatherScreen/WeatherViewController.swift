@@ -12,87 +12,42 @@ fileprivate struct Constants {
     static let tempretureSectionHeight: CGFloat = 100
     static let offsetHeight: CGFloat = UIScreen.main.bounds.height/5
     static let numberOfRowsInSection = 1
-    static let heightForFirstRow: CGFloat = 40
+    static let heightForFirstRow: CGFloat = 47
     static let heightForMainContentCells: CGFloat = 55
     static let bottomContentViewHeight: CGFloat = 30
-    static let defaultScreenWidth: CGFloat = 375
-}
-
-enum BackgroundColorCase: String {
-    case night = "night"
-    case day = "day"
-    case precipitation = "precipitation"
-    
-    init(value: String) {
-        switch value {
-        case "night":
-            self = .night
-        case "day":
-            self = .day
-        case "precipitation":
-            self = .precipitation
-        default:
-            self = .day
-        }
-    }
-    
-    func getColor() -> UIColor {
-        switch self {
-        case .day:
-            return #colorLiteral(red: 0.239831388, green: 0.5518291593, blue: 0.7405184507, alpha: 1)
-        case .night:
-            return #colorLiteral(red: 0.05488184839, green: 0.07055146247, blue: 0.1697204709, alpha: 1)
-        case .precipitation:
-            return #colorLiteral(red: 0.45586133, green: 0.5314458013, blue: 0.5995544791, alpha: 1)
-        }
-    }
 }
 
 protocol MainScreenView {
     func displayWeather(mainScreenWeatherModel: MainScreenWeatherModel)
-    func displayErrorMessage(errorMessage: String)
-    func setBackroundColor(bacgroundColorCase: BackgroundColorCase)
 }
 
 class WeatherViewController: UIViewController, MainScreenView {
-    
     var presenter: MainScreenPresenterProtocol!
     private let configurator: WeatherScreenConfiguratorProtocol = WeatherScreenConfigurator()
-    
     private var weatherByHoursView = WeatherByHoursView()
-    private lazy var backgroundView: ContentView = {
-        let view = ContentView()
-        view.backgroundColor = self.view.backgroundColor
-        return view
-    }()
-    
     private let bottomView = ContentView()
-    private let bottomSeparatorView = SeparatorView()
+    private let mainView = UIView()
+    
     
     private var topContentView: ContentView = {
         let view = ContentView()
         return view
     }()
-    // Labels
+    
     private let cityLabel: WeatherLabel = {
         let label = WeatherLabel()
         label.text = "loading"
-        label.font = UIFont.systemFont(ofSize: 30)
+        label.font = UIFont(name: "Inter-Regular_Medium", size: 30)
         return label
     }()
     private let temperatureLabel: WeatherLabel = {
         let label = WeatherLabel()
         label.text = "0"
-        var fontSize: CGFloat!
-        if UIScreen.main.bounds.width > Constants.defaultScreenWidth {
-            fontSize = 30
-        } else {
-            fontSize = 30
-        }
-        label.font = UIFont.systemFont(ofSize: fontSize, weight: .thin)
+        label.font = UIFont(name: "Inter-Regular_Medium", size: 16)
+        label.alpha = 0.6
         return label
     }()
-
+    
     
     private var viewModel: MainScreenWeatherModel?
     
@@ -101,8 +56,6 @@ class WeatherViewController: UIViewController, MainScreenView {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(WeatherForAWeekTableViewCell.self, forCellReuseIdentifier: "weatherForAWeekCell")
-        tableView.register(WeatherDataCell.self, forCellReuseIdentifier: "weatherDataCell")
         tableView.register(WeatherForAWeekTableViewCell.self, forCellReuseIdentifier: "weatherForAWeekTableViewCell")
         tableView.backgroundColor = .clear
         tableView.contentInset = UIEdgeInsets(top: Constants.offsetHeight+Constants.tempretureSectionHeight,
@@ -118,145 +71,101 @@ class WeatherViewController: UIViewController, MainScreenView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.239831388, green: 0.5518291593, blue: 0.7405184507, alpha: 1)
+        view.addSubview(mainView)
         layoutTopContentView()
         bottomViewLayout()
         layoutTableView()
-        //layoutTopLabels()
         configurator.configure(view: self)
         presenter.getWeather()
+        view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
+        
+        var firsColor = UIColor(red: 160/255.0, green: 221/255.0, blue: 255/255.0, alpha: 1)
+        var seconColor = UIColor(red: 92/255.0, green: 194/255.0, blue: 252/255.0, alpha: 1)
+        var thirdColor = UIColor(red: 198/255.0, green: 231/255.0, blue: 249/255.0, alpha: 1)
+        mainView.layer.addSublayer(gradient(initialColor: firsColor, middleColor: seconColor, finalColor: thirdColor))
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         tableView.contentOffset = CGPoint(x: 0, y: -(Constants.offsetHeight+Constants.tempretureSectionHeight))
     }
+    func gradient(initialColor: UIColor, middleColor: UIColor,
+                  finalColor: UIColor) -> CAGradientLayer {
+        let gradient = CAGradientLayer()
+        gradient.frame = view.bounds
+        
+        gradient.colors = [initialColor.withAlphaComponent(0.2), middleColor.withAlphaComponent(0.2), finalColor.withAlphaComponent(0.4)].map{$0.cgColor}
+        gradient.locations = [0.13, 0.32, 0.64]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1)
+        
+        return gradient
+    }
     
     func displayWeather(mainScreenWeatherModel: MainScreenWeatherModel) {
-        // setup labels
         cityLabel.text = mainScreenWeatherModel.mainScreenCurrentWeatherModel.city
         temperatureLabel.text = mainScreenWeatherModel.mainScreenCurrentWeatherModel.temperature
-        // setup viewModel and reload tableView
         viewModel = mainScreenWeatherModel
-     //   weatherByHoursView.backgroundColor = .red
         weatherByHoursView.viewModel = mainScreenWeatherModel.mainScreenHourlyWeatherModel
         tableView.reloadData()
     }
     
-    // if there is some mistake display it in alert
-    func displayErrorMessage(errorMessage: String) {
-        let alert = AlertManager.shared.createAlert(title: "Error",
-                                                    subtitle: errorMessage,
-                                                    actionTitle: "Ok")
-        present(alert, animated: true, completion: nil)
-    }
-    
-    func setBackroundColor(bacgroundColorCase: BackgroundColorCase) {
-        let color = bacgroundColorCase.getColor()
-        view.backgroundColor = color
-        weatherByHoursView.backgroundColor = color
-        backgroundView.backgroundColor = color
-        bottomView.backgroundColor = color
-    }
-    
-    
     //MARK: - Layout elements
     
     private func layoutTopContentView() {
-        view.addSubview(topContentView)
+        mainView.translatesAutoresizingMaskIntoConstraints = false
+        mainView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        mainView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        mainView.addSubview(topContentView)
         topContentView.backgroundColor = .clear
         topContentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         topContentView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height/5.5).isActive = true
         topContentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         topContentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        // stackView for labels setup
-//        let stackView = UIStackView()
-//        stackView.axis = .vertical
-//        stackView.alignment = .center
-//        stackView.distribution = .equalSpacing
-//        stackView.spacing = 4
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        stackView.addArrangedSubview(cityLabel)
-//
         topContentView.addSubview(cityLabel)
-//        stackView.centerXAnchor.constraint(equalTo: topContentView.centerXAnchor).isActive = true
-//        stackView.bottomAnchor.constraint(equalTo: topContentView.bottomAnchor, constant: -20).isActive = true
         ConstraintAssistant.shared.addContraint(view1: cityLabel, view2: topContentView, size: 60, typeOfConstraints: .topToTop)
         ConstraintAssistant.shared.addContraint(view1: cityLabel, view2: view, size: 0, typeOfConstraints: .centerXAnchor)
         
         topContentView.addSubview(temperatureLabel)
-//        stackView.centerXAnchor.constraint(equalTo: topContentView.centerXAnchor).isActive = true
-//        stackView.bottomAnchor.constraint(equalTo: topContentView.bottomAnchor, constant: -20).isActive = true
         ConstraintAssistant.shared.addContraint(view1: temperatureLabel, view2: cityLabel, size: 6, typeOfConstraints: .topToBottom)
         ConstraintAssistant.shared.addContraint(view1: temperatureLabel, view2: view, size: 0, typeOfConstraints: .centerXAnchor)
         
     }
     
-    // weatherByHoursView topAnchor (if the view reachs the top, Anchor will be changed)
     var topAnchor: NSLayoutConstraint?
     var isTopAnchorConnectedToTableView = true
     private func layoutTableView() {
-        // layout tableView
-        view.addSubview(tableView)
+        mainView.addSubview(tableView)
+        tableView.backgroundColor = .clear
         tableView.topAnchor.constraint(equalTo: topContentView.bottomAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: bottomSeparatorView.topAnchor).isActive = true
-        
-        // layout tableView weatherByHoursView
-        tableView.addSubview(backgroundView)
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24).isActive = true
+        tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: bottomView.topAnchor).isActive = true
         tableView.addSubview(weatherByHoursView)
-        backgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        backgroundView.bottomAnchor.constraint(equalTo: weatherByHoursView.bottomAnchor).isActive = true
         
+        weatherByHoursView.backgroundColor = UIColor(red: 60/255.0, green: 78/255.0, blue: 101/255.0, alpha: 0.6)
         weatherByHoursView.translatesAutoresizingMaskIntoConstraints = false
-        weatherByHoursView.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        weatherByHoursView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        weatherByHoursView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        topAnchor = weatherByHoursView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
-        weatherByHoursView.backgroundColor = #colorLiteral(red: 0.239831388, green: 0.5518291593, blue: 0.7405184507, alpha: 1)
+        weatherByHoursView.heightAnchor.constraint(equalToConstant: 180).isActive = true
+        weatherByHoursView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor).isActive = true
+        weatherByHoursView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        topAnchor = weatherByHoursView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor, constant: -9)
         topAnchor!.isActive = true
-        
     }
     
-//    private func layoutTopLabels() {
-//        view.addSubview(temperatureLabel)
-//        temperatureLabel.topAnchor.constraint(equalTo: topContentView.bottomAnchor)
-//            .isActive = true
-//        temperatureLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-//
-//
-//
-//        // layout todayLabel and todayStaticLabel
-//        let stackView = UIStackView()
-//        stackView.axis = .horizontal
-//        stackView.alignment = .leading
-//        stackView.distribution = .equalSpacing
-//        stackView.spacing = 5
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        tableView.addSubview(stackView)
-//        stackView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 15).isActive = true
-//        stackView.bottomAnchor.constraint(equalTo: weatherByHoursView.topAnchor, constant: -15).isActive = true
-//    }
-    
     private func bottomViewLayout() {
-        let safeBottomAnchor = view.layoutMarginsGuide.bottomAnchor
-        view.addSubview(bottomView)
-        bottomView.backgroundColor = view.backgroundColor
+        let safeBottomAnchor = mainView.layoutMarginsGuide.bottomAnchor
+        mainView.addSubview(bottomView)
+        bottomView.backgroundColor = .clear
         bottomView.translatesAutoresizingMaskIntoConstraints = false
         bottomView.heightAnchor.constraint(equalToConstant: Constants.bottomContentViewHeight).isActive = true
         bottomView.bottomAnchor.constraint(equalTo: safeBottomAnchor).isActive = true
-        bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        bottomView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor).isActive = true
+        bottomView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor).isActive = true
         
-        view.addSubview(bottomSeparatorView)
-        bottomSeparatorView.bottomAnchor.constraint(equalTo: bottomView.topAnchor).isActive = true
-        bottomSeparatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        bottomSeparatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        bottomSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
     
 }
@@ -271,293 +180,16 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell!
-
-            cell = WeatherForAWeekTableViewCell()
-            (cell as! WeatherForAWeekTableViewCell).viewModel = viewModel?.mainScreenDailyWeatherModel
-
-        cell.backgroundColor = .clear
+        
+        cell = WeatherForAWeekTableViewCell()
+        (cell as! WeatherForAWeekTableViewCell).viewModel = viewModel?.mainScreenDailyWeatherModel
+        cell.backgroundColor = UIColor(red: 60/255.0, green: 78/255.0, blue: 101/255.0, alpha: 0.6)
         cell.isUserInteractionEnabled = false
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
-            return CGFloat(viewModel?.mainScreenDailyWeatherModel.count ?? 7)*Constants.heightForFirstRow
-
+        return CGFloat(viewModel?.mainScreenDailyWeatherModel.count ?? 8)*Constants.heightForFirstRow
     }
-    
 }
-
-////MARK: - ScrollViewDelegate
-//extension WeatherViewController: UIScrollViewDelegate {
-//
-//    // culculate alpha depending on the scrollView offset
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let offset = -scrollView.contentOffset.y
-//        var alpha = 1 * (offset-Constants.tempretureSectionHeight) / (Constants.offsetHeight)
-//        var temperatureAplha = alpha
-//        // if scrollView has riched the top change topAnchor
-//        if offset <= Constants.tempretureSectionHeight {
-//            stopHourlyWeatherSection()
-//        } else {
-//            attachHourlyWeathernToTableView()
-//        }
-//        if alpha < 1 {
-//            temperatureAplha-=0.55
-//            alpha-=0.60
-//        }
-//        temperatureLabel.alpha = temperatureAplha
-//    }
-//
-//    // if user stops scrolling scrollView and doesn't reach the top - scroll to the top
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        let offset = -scrollView.contentOffset.y
-//        if (offset > Constants.tempretureSectionHeight
-//            && offset < (Constants.offsetHeight+Constants.tempretureSectionHeight))
-//            && isTopAnchorConnectedToTableView {
-//            UIView.animate(withDuration: 0.2, animations: { [unowned self] in
-//                self.temperatureLabel.alpha = 0
-//                scrollView.contentOffset = CGPoint(x: 0, y: -Constants.tempretureSectionHeight)
-//            }) { [unowned self] (isComlited) in
-//                if isComlited {
-//                    self.isTopAnchorConnectedToTableView = false
-//                }
-//            }
-//        }
-//    }
-//
-//    // attach object to topView
-//    fileprivate func stopHourlyWeatherSection() {
-//        if isTopAnchorConnectedToTableView {
-//            if let topAnchor = topAnchor {
-//                topAnchor.isActive = false
-//            }
-//            topAnchor = weatherByHoursView.topAnchor.constraint(equalTo: topContentView.bottomAnchor)
-//            topAnchor?.isActive = true
-//            isTopAnchorConnectedToTableView = false
-//        }
-//    }
-//
-//    // attach object to tableView back
-//    fileprivate func attachHourlyWeathernToTableView() {
-//        if !isTopAnchorConnectedToTableView {
-//            if let topAnchor = topAnchor {
-//                topAnchor.isActive = false
-//            }
-//            topAnchor = weatherByHoursView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor)
-//            topAnchor?.isActive = true
-//            isTopAnchorConnectedToTableView = true
-//        }
-//    }
-//}
-
-//import UIKit
-//
-//class WeatherViewController: UIViewController {
-//
-//    private let grad = CAGradientLayer()
-//    private var currentConditionLable = UILabel()
-//    private var currentTempLable = UILabel()
-//    private var cityNameLable = UILabel()
-//    private var currentWeatherStack = UIStackView()
-//    private var generalView = UIView()
-//    private var hoursTempView = UIView()
-//    private var descriptionWeatherLable = UILabel()
-//    private var seporateLineView = UIView()
-//    private var hoursTempStack = UIStackView()
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        addingSubViews()
-//        configureConstraints()
-//        hoursTempView.addSubview(descriptionWeatherLable)
-//        hoursTempView.addSubview(seporateLineView)
-//        hoursTempView.addSubview(hoursTempStack)
-//    }
-//
-//    private func addingSubViews() {
-//        currentWeatherStack.addArrangedSubview(currentTempLable)
-//        currentWeatherStack.addArrangedSubview(currentConditionLable)
-//        generalView.addSubview(cityNameLable)
-//        generalView.addSubview(currentWeatherStack)
-//        view.addSubview(generalView)
-//    }
-//    private func configureConstraints() {
-//
-//        for family in UIFont.familyNames.sorted() {
-//            let names = UIFont.fontNames(forFamilyName: family)
-//            print("Family: \(family) Font names: \(names)")
-//        }
-//
-//
-//        guard let customFont = UIFont(name: "Inter-Regular_Medium", size: 30) else {
-//            fatalError("""
-//                Failed to load the "CustomFont-Light" font.
-//                Make sure the font file is included in the project and the font name is spelled correctly.
-//                """
-//            )
-//        }
-//
-//        guard let customFontt = UIFont(name: "Inter-Regular_Medium", size: 16) else {
-//            fatalError("""
-//                Failed to load the "CustomFont-Light" font.
-//                Make sure the font file is included in the project and the font name is spelled correctly.
-//                """
-//            )
-//        }
-//
-//        func gradient(initialColor: UIColor, middleColor: UIColor,
-//                      finalColor: UIColor) -> CAGradientLayer {
-//            let gradient = CAGradientLayer()
-//            gradient.frame = view.bounds
-//
-//            gradient.colors = [initialColor.withAlphaComponent(0.25), middleColor.withAlphaComponent(0.25), finalColor.withAlphaComponent(0.0)].map{$0.cgColor}
-//            gradient.locations = [0.13, 0.32, 0.64]
-//            gradient.startPoint = CGPoint(x: 0.5, y: 0)
-//            gradient.endPoint = CGPoint(x: 0.5, y: 1)
-//
-//            return gradient
-//        }
-//        //FORCE UNRAPING
-//        view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
-//        var firsColor = UIColor(red: 160, green: 221, blue: 255, alpha: 1)
-//        var seconColor = UIColor(red: 92, green: 194, blue: 252, alpha: 1)
-//        var thirdColor = UIColor(red: 198, green: 231, blue: 249, alpha: 1)
-//       // generalView.layer.addSublayer(gradient(initialColor: firsColor, middleColor: seconColor, finalColor: thirdColor))
-//
-//        cityNameLable.textColor = .white
-//        cityNameLable.font = UIFontMetrics.default.scaledFont(for: customFont)
-//        cityNameLable.adjustsFontForContentSizeCategory = true
-//
-//        currentConditionLable.font = UIFontMetrics.default.scaledFont(for: customFontt)
-//        currentConditionLable.adjustsFontForContentSizeCategory = true
-//        currentConditionLable.textColor = .white
-//        currentConditionLable.alpha = 0.6
-//
-//        currentTempLable.font = UIFontMetrics.default.scaledFont(for: customFontt)
-//        currentTempLable.adjustsFontForContentSizeCategory = true
-//        currentTempLable.textColor = .white
-//        currentTempLable.alpha = 0.6
-//
-//        cityNameLable.text = "Минск"
-//        currentConditionLable.text = "| Облачно"
-//        currentTempLable.text = "-4"
-//        currentWeatherStack.axis = .horizontal
-//        currentWeatherStack.alignment = .fill
-//        currentWeatherStack.spacing = 5
-//
-//        currentConditionLable.translatesAutoresizingMaskIntoConstraints = false
-//        currentTempLable.translatesAutoresizingMaskIntoConstraints = false
-//        cityNameLable.translatesAutoresizingMaskIntoConstraints = false
-//        currentWeatherStack.translatesAutoresizingMaskIntoConstraints = false
-//        generalView.translatesAutoresizingMaskIntoConstraints = false
-//        addContraint(view1: cityNameLable, view2: generalView, size: 60, typeOfConstraints: .topToTop)
-//        addContraint(view1: cityNameLable, view2: generalView, size: 0, typeOfConstraints: .centerXAnchor)
-//        addContraint(view1: currentWeatherStack, view2: generalView, size: 0, typeOfConstraints: .centerXAnchor)
-//        addContraint(view1: currentWeatherStack, view2: cityNameLable, size: 6, typeOfConstraints: .topToBottom)
-//        addContraint(view1: generalView, view2: view, size: 0, typeOfConstraints: .topToTop)
-//        addContraint(view1: generalView, view2: view, size: 0, typeOfConstraints: .botttomToBottom)
-//        addContraint(view1: generalView, view2: view, size: 0, typeOfConstraints: .leftToLeft)
-//        addContraint(view1: generalView, view2: view, size: 0, typeOfConstraints: .rightToRight)
-//    }
-//
-//    private enum typeOfContraints {
-//        case topToTop
-//        case topToBottom
-//        case bottomToTop
-//        case botttomToBottom
-//        case leftToLeft
-//        case leftToRight
-//        case rightToRight
-//        case rightToLeft
-//        case height
-//        case width
-//        case widthToHeight
-//        case heightToWidth
-//        case centerXAnchor
-//        case centerYAnchor
-//    }
-//
-//    private func addContraint(view1: UIView, view2: UIView?, size: Double, typeOfConstraints: typeOfContraints) {
-//        switch typeOfConstraints {
-//        case .topToBottom:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.topAnchor.constraint(equalTo: view2.bottomAnchor, constant: size).isActive = true
-//
-//        case .botttomToBottom:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.bottomAnchor.constraint(equalTo: view2.bottomAnchor, constant: size).isActive = true
-//
-//        case .rightToRight:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.rightAnchor.constraint(equalTo: view2.rightAnchor, constant: size).isActive = true
-//
-//        case .leftToLeft:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.leftAnchor.constraint(equalTo: view2.leftAnchor, constant: size).isActive = true
-//
-//        case .height:
-//            let _ = view1.heightAnchor.constraint(equalToConstant: size).isActive = true
-//
-//        case .width:
-//            let _ = view1.widthAnchor.constraint(equalToConstant: size).isActive = true
-//
-//        case .centerXAnchor:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.centerXAnchor.constraint(equalTo: view2.centerXAnchor).isActive = true
-//
-//        case .centerYAnchor:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.centerYAnchor.constraint(equalTo: view2.centerYAnchor).isActive = true
-//
-//        case .widthToHeight:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.widthAnchor.constraint(equalTo: view2.heightAnchor, multiplier: size).isActive = true
-//
-//        case .topToTop:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.topAnchor.constraint(equalTo: view2.topAnchor, constant: size).isActive = true
-//        case .bottomToTop:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.bottomAnchor.constraint(equalTo: view2.topAnchor, constant: size).isActive = true
-//
-//        case .leftToRight:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.leftAnchor.constraint(equalTo: view2.rightAnchor, constant: size).isActive = true
-//
-//        case .rightToLeft:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.rightAnchor.constraint(equalTo: view2.leftAnchor, constant: size).isActive = true
-//
-//        case .heightToWidth:
-//            guard let view2 = view2 else {
-//                return
-//            }
-//            let _ = view1.heightAnchor.constraint(equalTo: view2.widthAnchor, multiplier: size).isActive = true
-//        }
-//    }
-//
-//}
 

@@ -8,25 +8,32 @@
 import UIKit
 
 class WeatherForAWeekCell: UITableViewCell {
-   
     private let dayLabel: WeatherLabel = {
         let label = WeatherLabel()
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont(name: "Inter-Regular_Medium", size: 18)
         label.text = "-"
         return label
     }()
     
     private let weaherIconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .black
+        // /imageView.backgroundColor = .black
         imageView.backgroundColor = .clear
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
+    private let chanceOfPrecipitationLabel: WeatherLabel = {
+        let label = WeatherLabel()
+        label.textColor = UIColor(red: 139/255.0, green: 205/255.0, blue: 231/255.0, alpha: 1)
+        label.font = UIFont(name: "Inter-Regular_Medium", size: 11)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let maxTemperatureLabel: WeatherLabel = {
         let label = WeatherLabel()
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont(name: "Inter-Regular_Medium", size: 16)
         label.text = "-"
         return label
     }()
@@ -34,7 +41,7 @@ class WeatherForAWeekCell: UITableViewCell {
     private let minTemperatureLabel: WeatherLabel = {
         let label = WeatherLabel()
         label.textColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.65)
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont(name: "Inter-Regular_Medium", size: 16)
         label.text = "-"
         return label
     }()
@@ -49,29 +56,37 @@ class WeatherForAWeekCell: UITableViewCell {
     }
     
     func setupElements(viewModel: MainScreenDailyWeatherModel) {
+        let celsius = NSString(format:"\u{00B0}") as String
+        if let chance = viewModel.chance {
+            chanceOfPrecipitationLabel.isHidden = false
+            chanceOfPrecipitationLabel.text = chance
+        }
         dayLabel.text = viewModel.day
-        maxTemperatureLabel.text = viewModel.maxTemperature.description
-        minTemperatureLabel.text = viewModel.minTemperature.description
+        maxTemperatureLabel.text = viewModel.maxTemperature.description + celsius
+        minTemperatureLabel.text = viewModel.minTemperature.description + celsius
         weaherIconImageView.image = viewModel.getIconImage()
     }
     
     private func layoutElements() {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.addArrangedSubview(weaherIconImageView)
+        stack.addArrangedSubview(chanceOfPrecipitationLabel)
+        
         addSubview(dayLabel)
-        dayLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15).isActive = true
+        dayLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
         dayLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        addSubview(weaherIconImageView)
-        weaherIconImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        weaherIconImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        
-        addSubview(maxTemperatureLabel)
+        addSubview(stack)
+        stack.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -30).isActive = true
+        stack.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        addSubview(maxTemperatureLabel )
         addSubview(minTemperatureLabel)
         
-        minTemperatureLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15).isActive = true
-        minTemperatureLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        
-        maxTemperatureLabel.centerXAnchor.constraint(equalTo: minTemperatureLabel.trailingAnchor,
-                                                     constant: -65).isActive = true
+        maxTemperatureLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14).isActive = true
         maxTemperatureLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        minTemperatureLabel.centerXAnchor.constraint(equalTo: maxTemperatureLabel.trailingAnchor,constant: -85).isActive = true
+        minTemperatureLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 }

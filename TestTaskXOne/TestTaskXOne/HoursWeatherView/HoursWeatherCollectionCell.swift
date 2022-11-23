@@ -12,7 +12,6 @@ fileprivate struct Constants {
 }
 
 class HoursWeatherCollectionCell: UICollectionViewCell {
-    
     private let timeLabel: WeatherLabel = {
         let label = WeatherLabel()
         label.text = "-"
@@ -22,14 +21,13 @@ class HoursWeatherCollectionCell: UICollectionViewCell {
     private let temperatureLabel: WeatherLabel = {
         let label = WeatherLabel()
         label.text = "-"
-        label.font = UIFont.systemFont(ofSize: 19)
         return label
     }()
     
     private let chanceOfPrecipitationLabel: WeatherLabel = {
         let label = WeatherLabel()
         label.textColor = #colorLiteral(red: 0.3952505589, green: 0.7498927712, blue: 0.9492647052, alpha: 1)
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont(name: "Inter-Regular_Medium", size: 11)
         return label
     }()
     
@@ -56,11 +54,19 @@ class HoursWeatherCollectionCell: UICollectionViewCell {
         timeLabel.text = "11"
         temperatureLabel.text = "4"
     }
-
+    
     func setupElements(data: MainScreenHourlyWeatherModel?) {
+        let celsius = NSString(format:"\u{00B0}") as String
         guard let data = data else { return }
+        if data.degrees == "Заход солнца" {
+            temperatureLabel.font = UIFont(name: "Inter-Regular_Medium", size: 18)
+            timeLabel.text = data.stringTime
+            temperatureLabel.text = data.degrees
+            weaherIconImageView.image = data.getIconImage()
+            return
+        }
         timeLabel.text = data.stringTime
-        temperatureLabel.text = data.degrees
+        temperatureLabel.text = data.degrees + celsius
         weaherIconImageView.image = data.getIconImage()
     }
     

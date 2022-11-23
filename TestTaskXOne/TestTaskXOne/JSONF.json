@@ -20,21 +20,6 @@
      "temperature": "-14"
    },
     {
-     "timestamp": "18",
-     "weather_type": "cloudy",
-     "temperature": "-14"
-   },
-    {
-     "timestamp": "18",
-     "weather_type": "cloudy",
-     "temperature": "-14"
-   },
-    {
-     "timestamp": "18",
-     "weather_type": "cloudy",
-     "temperature": "-14"
-   },
-    {
      "timestamp": "19",
      "sunset": true,
      "weather_type": "cloudy",
@@ -52,7 +37,8 @@
      "date": "22.10.2022",
      "min_temperature": -5,
      "max_temperature": 1,
-     "weather_type": "cloudy"
+     "weather_type": "snow",
+     "chance": "70%"
    },
    {
      "date": "23.10.2022",
@@ -70,7 +56,8 @@
      "date": "25.10.2022",
      "min_temperature": -4,
      "max_temperature": -1,
-     "weather_type": "cloudy"
+     "weather_type": "snow",
+     "chance": "70%"
    },
     {
      "date": "26.10.2022",
@@ -91,39 +78,9 @@
      "weather_type": "cloudy"
    },
     {
-     "date": "28.10.2022",
-     "min_temperature": -10,
-     "max_temperature": -5,
-     "weather_type": "cloudy"
-   },
-    {
-     "date": "28.10.2022",
-     "min_temperature": -10,
-     "max_temperature": -5,
-     "weather_type": "cloudy"
-   },
-    {
-     "date": "28.10.2022",
-     "min_temperature": -10,
-     "max_temperature": -5,
-     "weather_type": "cloudy"
-   },
-    {
-     "date": "28.10.2022",
-     "min_temperature": -10,
-     "max_temperature": -5,
-     "weather_type": "cloudy"
-   },
-    {
-     "date": "28.10.2022",
-     "min_temperature": -10,
-     "max_temperature": -5,
-     "weather_type": "cloudy"
-   },
-    {
      "date": "29.10.2022",
-     "min_temperature": -5,
-     "max_temperature": -2,
+     "min_temperature": -10,
+     "max_temperature": -5,
      "weather_type": "cloudy"
    }
  ]
