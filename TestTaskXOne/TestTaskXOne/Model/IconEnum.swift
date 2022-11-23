@@ -8,9 +8,9 @@
 import UIKit
 
 enum WeatherIconCases: String {
-    case snow = "snow3"
-    case cloudy = "cloudy2"
-    case sunset = "sunset2"
+    case snow = "snow"
+    case cloudy = "cloudy"
+    case sunset = "sunset"
 
     init(value: String) {
         switch value {

@@ -11,9 +11,8 @@ class TitleCell: UITableViewCell {
     
     private let titleLable: WeatherLabel = {
         let label = WeatherLabel()
-        label.font = UIFont(name: "Inter-Regular_Medium", size: 14)
         label.text = "10-DAY FORECAST"
-        label.textColor = UIColor(red: 149/255.0, green: 161/255.0, blue: 177/255.0, alpha: 1)
+        label.textColor = CustomColors.textGray.color
         return label
     }()
     
@@ -21,7 +20,7 @@ class TitleCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "calendar1")?.withTintColor(UIColor(red: 149/255.0, green: 161/255.0, blue: 177/255.0, alpha: 1))
+        imageView.image = UIImage(named: "calendar")?.withTintColor(CustomColors.textGray.color ?? .gray)
         return imageView
     }()
     

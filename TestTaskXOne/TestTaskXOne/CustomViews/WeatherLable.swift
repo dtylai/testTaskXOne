@@ -12,7 +12,7 @@ class WeatherLabel: UILabel {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
         textColor = .white
-        font = UIFont(name: "Inter-Regular_Medium", size: 14)
+        font = UIFont.returnInterFont(size: 14)
     }
     
     required init?(coder: NSCoder) {

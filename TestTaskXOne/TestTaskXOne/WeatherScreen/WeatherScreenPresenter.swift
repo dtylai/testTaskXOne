@@ -13,9 +13,7 @@ protocol MainScreenPresenterProtocol {
 
 class MainScreenPresenter: NSObject, MainScreenPresenterProtocol {
     var view: MainScreenView!
-    private var apiManager = JSONManager()
-    private var isErrorMessageWasShown = false
-    private var isgetWeatherFinished = false
+    private var jsonManager = JSONManager()
     
     override init() {
         super.init()
@@ -23,7 +21,7 @@ class MainScreenPresenter: NSObject, MainScreenPresenterProtocol {
     }
     
     @objc func getWeather() {
-        let mainScreenWeatherModel = self.weatherToMainScreenWeatherModel(weather: apiManager.getWeather()!)
+        let mainScreenWeatherModel = self.weatherToMainScreenWeatherModel(weather: jsonManager.getWeather()!)
         DispatchQueue.main.async {
             self.view.displayWeather(mainScreenWeatherModel: mainScreenWeatherModel)
         }
@@ -32,28 +30,29 @@ class MainScreenPresenter: NSObject, MainScreenPresenterProtocol {
     
     private func weatherToMainScreenWeatherModel(weather: Weather) -> MainScreenWeatherModel {
         let mainScreenCurrentWeatherModel = MainScreenCurrentWeatherModel(city: weather.city, temperature: weather.temperature)
-        var mainScreenHourlyWeather: [MainScreenHourlyWeatherModel] = []
         
+        var mainScreenHourlyWeather: [MainScreenHourlyWeatherModel] = []
         for weather in weather.weatherPerDay {
             let mainScreenHourlyWeatherModel = MainScreenHourlyWeatherModel(stringTime: weather.timestamp, icon: weather.weatherType, degrees: weather.temperature)
+            mainScreenHourlyWeather.append(mainScreenHourlyWeatherModel)
             if weather.sunset != nil {
                 let sunSetMainScreenHourlyWeatherModel = MainScreenHourlyWeatherModel(stringTime: weather.timestamp, icon: "sunset", degrees: "Заход солнца")
                 mainScreenHourlyWeather.append(sunSetMainScreenHourlyWeatherModel)
             }
-            mainScreenHourlyWeather.append(mainScreenHourlyWeatherModel)
         }
-        
         mainScreenHourlyWeather[0].stringTime = "Сейчас"
         let mainScreenH = MainScreenHourly(description: weather.weatherDescription, hourly: mainScreenHourlyWeather)
-        var mainScreenDailyWeather: [MainScreenDailyWeatherModel] = []
         
+        var mainScreenDailyWeather: [MainScreenDailyWeatherModel] = []
         for weather in weather.forecast {
             
             let mainScreenDailyWeatherModel = MainScreenDailyWeatherModel(day: weather.getDay(), icon: weather.weatherType, maxTemperature: weather.maxTemperature, minTemperature: weather.minTemperature, chance: weather.chance)
             mainScreenDailyWeather.append(mainScreenDailyWeatherModel)
         }
         mainScreenDailyWeather[0].day = "Сегодня"
+        
         let mainScreenWeatherModel = MainScreenWeatherModel(mainScreenCurrentWeatherModel: mainScreenCurrentWeatherModel, mainScreenHourlyWeatherModel: mainScreenH, mainScreenDailyWeatherModel: mainScreenDailyWeather)
+        
         return mainScreenWeatherModel
     }
 }

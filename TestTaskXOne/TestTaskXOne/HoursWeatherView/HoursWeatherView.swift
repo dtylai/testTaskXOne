@@ -8,12 +8,16 @@
 import UIKit
 
 class WeatherByHoursView: UIView {
-    let topSeparatorView = SeparatorView()
-    let bottomSeparatorView = SeparatorView()
-    let descriptionLable = UILabel()
+    let middleSeparatorView = SeparatorView()
+    var descriptionLable:  WeatherLabel = {
+       let label = WeatherLabel()
+       label.text = "-"
+       label.textColor = .white
+       label.numberOfLines = 2
+       return label
+   }()
     var viewModel: MainScreenHourly? {
         didSet {
-            descriptionLable.font = UIFont(name: "Inter-Regular_Medium", size: 14)
             descriptionLable.text = viewModel?.description
             collectionView.reloadData()
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0),
@@ -40,9 +44,6 @@ class WeatherByHoursView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layoutElements()
-        descriptionLable.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLable.textColor = .white
-        descriptionLable.numberOfLines = 2
         backgroundColor = .red
         layer.cornerRadius = 14
     }
@@ -56,16 +57,15 @@ class WeatherByHoursView: UIView {
         descriptionLable.topAnchor.constraint(equalTo: topAnchor, constant: 14).isActive = true
         descriptionLable.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
         descriptionLable.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        //descriptionLable.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
-        addSubview(bottomSeparatorView)
-        bottomSeparatorView.topAnchor.constraint(equalTo: descriptionLable.bottomAnchor, constant: 14).isActive = true
-        bottomSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
-        bottomSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14).isActive = true
-        bottomSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+
+        addSubview(middleSeparatorView)
+        middleSeparatorView.topAnchor.constraint(equalTo: descriptionLable.bottomAnchor, constant: 14).isActive = true
+        middleSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
+        middleSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14).isActive = true
+        middleSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         addSubview(collectionView)
-        collectionView.topAnchor.constraint(equalTo: bottomSeparatorView.bottomAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: middleSeparatorView.bottomAnchor).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true

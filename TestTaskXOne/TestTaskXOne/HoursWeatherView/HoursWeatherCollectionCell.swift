@@ -24,13 +24,6 @@ class HoursWeatherCollectionCell: UICollectionViewCell {
         return label
     }()
     
-    private let chanceOfPrecipitationLabel: WeatherLabel = {
-        let label = WeatherLabel()
-        label.textColor = #colorLiteral(red: 0.3952505589, green: 0.7498927712, blue: 0.9492647052, alpha: 1)
-        label.font = UIFont(name: "Inter-Regular_Medium", size: 11)
-        return label
-    }()
-    
     private let weaherIconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
@@ -49,7 +42,6 @@ class HoursWeatherCollectionCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        chanceOfPrecipitationLabel.isHidden = true
         weaherIconImageView.image = nil
         timeLabel.text = "11"
         temperatureLabel.text = "4"
@@ -59,7 +51,7 @@ class HoursWeatherCollectionCell: UICollectionViewCell {
         let celsius = NSString(format:"\u{00B0}") as String
         guard let data = data else { return }
         if data.degrees == "Заход солнца" {
-            temperatureLabel.font = UIFont(name: "Inter-Regular_Medium", size: 18)
+            temperatureLabel.font = UIFont.returnInterFont(size: 18)
             timeLabel.text = data.stringTime
             temperatureLabel.text = data.degrees
             weaherIconImageView.image = data.getIconImage()
@@ -86,9 +78,5 @@ class HoursWeatherCollectionCell: UICollectionViewCell {
         stackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        
-        addSubview(chanceOfPrecipitationLabel)
-        chanceOfPrecipitationLabel.bottomAnchor.constraint(equalTo: weaherIconImageView.topAnchor).isActive = true
-        chanceOfPrecipitationLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
 }

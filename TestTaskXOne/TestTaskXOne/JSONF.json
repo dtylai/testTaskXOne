@@ -16,12 +16,12 @@
    },
     {
      "timestamp": "18",
+     "sunset": true,
      "weather_type": "cloudy",
      "temperature": "-14"
    },
     {
      "timestamp": "19",
-     "sunset": true,
      "weather_type": "cloudy",
      "temperature": "-14"
    }

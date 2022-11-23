@@ -110,8 +110,8 @@
             filePath = "TestTaskXOne/WeatherTableViewContentCell/WeatherForAWeek/WeatherForAWeekCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "setupElements(viewModel:)"
             landmarkType = "7">
             <Locations>
@@ -158,8 +158,8 @@
             filePath = "TestTaskXOne/HoursWeatherView/HoursWeatherView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "collectionView"
             landmarkType = "24">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "TestTaskXOne/HoursWeatherView/HoursWeatherView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
             landmarkName = "collectionView"
             landmarkType = "24">
          </BreakpointContent>
